@@ -1,4 +1,4 @@
-
+#################### EM ALGO #########################
 # EM works best when we have some data coming from two distributions and we don't know which one of them a point belongs to
 # First step is to guess the initial parameter. 
     # Say we have two Gaussians so we need mu, sigma, and pi - pi is a mixing coef (prob that a point comes from first gaussian)
@@ -14,7 +14,7 @@
   # pi update is sum(r[ij])/N
 # Repeat for max iterations or until improvement is less than threshold. 
 
-
+#################### BKT SETUP ######################################
 # In BKT we have 4 latent parameters:
     # initial knowledge (prior), 
     # Learning rate (transition prob from not knowing to knowing the skill)
