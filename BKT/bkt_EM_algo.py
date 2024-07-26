@@ -13,3 +13,11 @@
   # sigma update is sum(r[ij]*(x[i]-mu[j])/sum(r[ij]), same way for each distribution
   # pi update is sum(r[ij])/N
 # Repeat for max iterations or until improvement is less than threshold. 
+
+
+# In BKT we have 4 latent parameters:
+    # initial knowledge (prior), 
+    # Learning rate (transition prob from not knowing to knowing the skill)
+    # Guessing Factor
+    # Slipping factor
+# Data would contain - student_id, skill_id, correct. Similar to our inter_seq (for DKT), one row per student-item pair. 
