@@ -13,6 +13,7 @@
   # sigma update is sum(r[ij]*(x[i]-mu[j])/sum(r[ij]), same way for each distribution
   # pi update is sum(r[ij])/N
 # Repeat for max iterations or until improvement is less than threshold. 
+https://medium.com/@keruchen/expectation-maximization-step-by-step-example-a9bb42add37d
 
 #################### BKT SETUP ######################################
 # In BKT we have 4 latent parameters:
