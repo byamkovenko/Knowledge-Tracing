@@ -18,7 +18,59 @@ https://medium.com/@keruchen/expectation-maximization-step-by-step-example-a9bb4
 #################### BKT SETUP ######################################
 # In BKT we have 4 latent parameters:
     # initial knowledge (prior), 
-    # Learning rate (transition prob from not knowing to knowing the skill)
-    # Guessing Factor
-    # Slipping factor
+    # Learning rate (transition prob from not knowing to knowing the skill) P(T) = P(Lt+1|Lt=0)
+    # Guessing Factor P(G)=P(obst=1|Lt=0)
+    # Slipping factor P(S) = P(obst=0|Lt=1)
 # Data would contain - student_id, skill_id, correct. Similar to our inter_seq (for DKT), one row per student-item pair. 
+
+# The prior update happens after each step in the sequence per student/per skill. 
+# P(Lt|obst=1) = P(Lt)*(1-P(S))/(P(Lt)*(1-P(S))+(1-P(Lt))*P(G))  - is probability that student mastered skill at time t. 
+# P(Lt|obst=0) = P(Lt)*(P(S))/(P(Lt)*(P(S))+(1-P(Lt))*(1-P(G))) 
+# Then updated prior for next time step is P(Lt+1) = P(Lt|obst) + (1 − P(Lt|obst))P(T)
+
+# Here is an example of working through calculations to compute P(L) after three questions in 1 skill. 
+# #import pandas as pd
+data={'user_id':[1,1,1],'skill_name':['plot','plot','plot'],'correct':[1,0,1]}
+df=pd.DataFrame(data)
+model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite different than manual below
+
+# step 1 set priors for P(L0) prior knowledge, P(T) - transition to knowing in one step, P(G) and P(S)
+# pl=.3
+# pt=.2
+# pg=.25
+# ps=.1
+
+# now for each step in sequence apply the update to the likelihood of knowing
+# since first step in seq is correct 
+# P(L₁|obs₁=1) = P(L₀)(1-P(S)) / (P(L₀)(1-P(S)) + (1-P(L₀))P(G))  
+# P(L₁|obs₁=1) = 0.3*(1-0.1) / (0.3*(1-0.1) + (1-0.3)*0.25)  
+# P(L₁|obs₁=1) ≈ 0.41
+
+# # then update the prior 
+# P(L2) = P(L1|obs1=1) + (1 - P(L1|obs1=0))P(T)   
+# P(L2) = 0.41 + (1 - 0.41) * 0.2  
+# P(L2) ≈ 0.528
+
+# # since second step is incorrect
+#  P(Lt|obst=0) = P(Lt)*(P(S))/(P(Lt)*(P(S))+(1-P(Lt))*(1-P(G))) 
+#  P(L2|obs2=0) ≈ (0.528 * .1)/(.528 * .1 + (1-.528)*(1-.25))
+#  P(L2|obs2=0) ≈ .129
+
+#  # we then update the prior again
+# P(L3) = P(L2|obs2=0) + (1 - P(L2|obs2=0))P(T)   
+# P(L3) = 0.129 + (1 - 0.129) * 0.2  
+# P(L3) ≈ 0.303
+
+# # since third step is correct
+#  P(Lt|obst=1) = P(L3)(1-P(S)) / (P(L3)(1-P(S)) + (1-P(L3))P(G)) 
+#  P(L3|obs3=1) ≈ (0.303 * (1-.1))/(.303 *(1-.1) + (1-.303)*.25)
+#  P(L3|obs3=1) ≈ .61
+
+#  # we then update the prior again
+# P(L4) = P(L3|obs3=1) + (1 - P(L3|obs3=1))P(T)   
+# P(L4) = 0.61 + (1 - 0.61) * 0.2  
+# P(L4) ≈ 0.688
+
+# So P(L) at the last step is the posterior probability of student knowing this skill. Computed on a skill/student level. 
+# P(T) is a broad model parameter that is learned via EM and indicates overall transition prob from not knowing to knowing after a step for all students
+
