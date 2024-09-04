@@ -44,32 +44,32 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # since first step in seq is correct 
 # P(L₁|obs₁=1) = P(L₀)(1-P(S)) / (P(L₀)(1-P(S)) + (1-P(L₀))P(G))  
 # P(L₁|obs₁=1) = 0.3*(1-0.1) / (0.3*(1-0.1) + (1-0.3)*0.25)  
-# P(L₁|obs₁=1) ≈ 0.41
+# P(L₁|obs₁=1) ≈ 0.606
 
 # # then update the prior 
 # P(L2) = P(L1|obs1=1) + (1 - P(L1|obs1=0))P(T)   
-# P(L2) = 0.41 + (1 - 0.41) * 0.2  
-# P(L2) ≈ 0.528
+# P(L2) = 0.606 + (1 - 0.606) * 0.2  
+# P(L2) ≈ 0.6848
 
 # # since second step is incorrect
 #  P(Lt|obst=0) = P(Lt)*(P(S))/(P(Lt)*(P(S))+(1-P(Lt))*(1-P(G))) 
-#  P(L2|obs2=0) ≈ (0.528 * .1)/(.528 * .1 + (1-.528)*(1-.25))
-#  P(L2|obs2=0) ≈ .129
+#  P(L2|obs2=0) ≈ (0.6848 * .1)/(.6848 * .1 + (1-.6848)*(1-.25))
+#  P(L2|obs2=0) ≈ .224
 
 #  # we then update the prior again
 # P(L3) = P(L2|obs2=0) + (1 - P(L2|obs2=0))P(T)   
-# P(L3) = 0.129 + (1 - 0.129) * 0.2  
-# P(L3) ≈ 0.303
+# P(L3) = 0.224 + (1 - 0.224) * 0.2  
+# P(L3) ≈ 0.3792
 
 # # since third step is correct
 #  P(Lt|obst=1) = P(L3)(1-P(S)) / (P(L3)(1-P(S)) + (1-P(L3))P(G)) 
-#  P(L3|obs3=1) ≈ (0.303 * (1-.1))/(.303 *(1-.1) + (1-.303)*.25)
-#  P(L3|obs3=1) ≈ .61
+#  P(L3|obs3=1) ≈ (0.3792 * (1-.1))/(.3792 *(1-.1) + (1-.3792)*.25)
+#  P(L3|obs3=1) ≈ .687
 
 #  # we then update the prior again
 # P(L4) = P(L3|obs3=1) + (1 - P(L3|obs3=1))P(T)   
-# P(L4) = 0.61 + (1 - 0.61) * 0.2  
-# P(L4) ≈ 0.688
+# P(L4) = 0.687 + (1 - 0.687) * 0.2  
+# P(L4) ≈ 0.7496
 
 # So P(L) at the last step is the posterior probability of student knowing this skill. Computed on a skill/student level. 
 # P(T) is a broad model parameter that is learned via EM and indicates overall transition prob from not knowing to knowing after a step for all students
@@ -90,3 +90,12 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # To predict the next question we use estimated P(L) along with S and G params
 # P(correct | L) = P(L) * (1 - P(S)) + (1 - P(L)) * P(G)
 # NOTE: If a student didn't work on a skill, we can't have a prediction, other than the prior. 
+
+
+################### EXAMPLE ABOVE EXTENDED TO UPDATE PARAMS ######################
+# So we have three responsibility values: .606, .224, .687, D = 1, C = 2
+# P(G_new) =  sum(((1-L)*.25)/((1-L)*.25+L*(1-.1)))/1 = .49, where L is only one point .224 for the one incorrect response 
+# P(S_new) = sum((L*.1)/((L*.1)+(1-L)*(1-.25)))/2 = .19., where L is now two values .606, .687, corrrect ones only
+# p(T_new) = (((1-.606)*.224)+ ((1-.224)*.687))/((1-.606)+(1-.224)) = .531
+
+# Now we can recompute the responsibilities with these parameters and then repeat Maximization step. 
