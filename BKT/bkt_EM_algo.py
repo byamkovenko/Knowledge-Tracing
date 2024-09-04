@@ -23,16 +23,16 @@ https://medium.com/@keruchen/expectation-maximization-step-by-step-example-a9bb4
     # Slipping factor P(S) = P(obst=0|Lt=1)
 # Data would contain - student_id, skill_id, correct. Similar to our inter_seq (for DKT), one row per student-item pair. 
 
+################ BKT COMPUTATION EXAMPLE ##################################
 # The prior update happens after each step in the sequence per student/per skill. 
 # P(Lt|obst=1) = P(Lt)*(1-P(S))/(P(Lt)*(1-P(S))+(1-P(Lt))*P(G))  - is probability that student mastered skill at time t. 
 # P(Lt|obst=0) = P(Lt)*(P(S))/(P(Lt)*(P(S))+(1-P(Lt))*(1-P(G))) 
 # Then updated prior for next time step is P(Lt+1) = P(Lt|obst) + (1 − P(Lt|obst))P(T)
 
 # Here is an example of working through calculations to compute P(L) after three questions in 1 skill. 
-# #import pandas as pd
 data={'user_id':[1,1,1],'skill_name':['plot','plot','plot'],'correct':[1,0,1]}
 df=pd.DataFrame(data)
-model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite different than manual below
+model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite different than manual below, but likely a function of init params
 
 # step 1 set priors for P(L0) prior knowledge, P(T) - transition to knowing in one step, P(G) and P(S)
 # pl=.3
@@ -74,3 +74,7 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # So P(L) at the last step is the posterior probability of student knowing this skill. Computed on a skill/student level. 
 # P(T) is a broad model parameter that is learned via EM and indicates overall transition prob from not knowing to knowing after a step for all students
 
+################## PREDICTION ####################
+# To predict the next question we use estimated P(L) along with S and G params
+# P(correct | L) = P(L) * (1 - P(S)) + (1 - P(L)) * P(G)
+# NOTE: If a student didn't work on a skill, we can't have a prediction, other than the prior. 
