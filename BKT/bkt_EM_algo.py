@@ -74,6 +74,18 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # So P(L) at the last step is the posterior probability of student knowing this skill. Computed on a skill/student level. 
 # P(T) is a broad model parameter that is learned via EM and indicates overall transition prob from not knowing to knowing after a step for all students
 
+################### EM ALGO #######################
+# Expectation:
+# start with initial params. Compute responsibility for each point - posterior prob that they knew the skill before answering, given they answered correctly
+# P(L1|correct) = P(L0) * (1 - P(S)) / [ P(L0) * (1 - P(S)) + (1 - P(L0)) * P(G) ] - repeat for all points but update P(L) at each step as in the example above.
+# NOTE: This is the same step as in manual calcs above. So responsibilities are computed for all points. 
+# Maximization: 
+# update each parameter based on the estimated probabilities in E step.
+# P(G) update - p(G_new) = Σ [ (1 - P(Ln))*p(G)/( (1 - P(Ln))*p(G) + P(Ln)*(1-p(S)) ) ] / |D| (where D is the number of data points with incorrect response). Summation over all incorrect.
+# P(S) update - P(S_new) = Σ [ P(Ln)*p(S)/(P(Ln)*p(S) + (1 - P(Ln))*(1 - p(G)) ) ] / |C| (where C is the number of data points with correct responses).  Summation over all correct.
+# P(T) update - p(T_new) = Σ [ (1 - P(Ln)) * P(Ln+1) ] / Σ [ (1 - P(Ln)) ]
+    # NOTE: For P(T) we are looking at transitions between pairs of questions. 
+    # 
 ################## PREDICTION ####################
 # To predict the next question we use estimated P(L) along with S and G params
 # P(correct | L) = P(L) * (1 - P(S)) + (1 - P(L)) * P(G)
