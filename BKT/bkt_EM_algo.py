@@ -47,7 +47,7 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # P(L₁|obs₁=1) ≈ 0.606
 
 # # then update the prior 
-# P(L2) = P(L1|obs1=1) + (1 - P(L1|obs1=0))P(T)   
+# P(L2) = P(L1|obs1) + (1 - P(L1|obs1))P(T)   
 # P(L2) = 0.606 + (1 - 0.606) * 0.2  
 # P(L2) ≈ 0.6848
 
@@ -57,7 +57,7 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 #  P(L2|obs2=0) ≈ .224
 
 #  # we then update the prior again
-# P(L3) = P(L2|obs2=0) + (1 - P(L2|obs2=0))P(T)   
+# P(L3) = P(L2|obs2) + (1 - P(L2|obs2))P(T)   
 # P(L3) = 0.224 + (1 - 0.224) * 0.2  
 # P(L3) ≈ 0.3792
 
@@ -67,7 +67,7 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 #  P(L3|obs3=1) ≈ .687
 
 #  # we then update the prior again
-# P(L4) = P(L3|obs3=1) + (1 - P(L3|obs3=1))P(T)   
+# P(L4) = P(L3|obs3) + (1 - P(L3|obs3))P(T)   
 # P(L4) = 0.687 + (1 - 0.687) * 0.2  
 # P(L4) ≈ 0.7496
 
@@ -109,4 +109,6 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # P(L0) * (1 - P(S)) - knew before the question and didn't slip
 # the two terms in the denominator give the total probability. 
 
-# WHy is this the prior update - P(L2) = P(L1|obs1=1) + (1 - P(L1|obs1=0))P(T)?
+# WHy is this the prior update - P(L2) = P(L1|obs1) + (1 - P(L1|obs1))P(T)?
+# Because there are two pathways to learning the skill - getting obs1 question correct (P(L1|obs1)) and learning the skill after getting the Q wrong (1-P(L1|obs)*P(T)
+# note the latter is weighted by the probability of transition. 
