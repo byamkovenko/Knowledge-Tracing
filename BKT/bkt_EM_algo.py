@@ -99,3 +99,14 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # p(T_new) = (((1-.606)*.224)+ ((1-.224)*.687))/((1-.606)+(1-.224)) = .531
 
 # Now we can recompute the responsibilities with these parameters and then repeat Maximization step. 
+
+#################### MEANING #############################
+# P(L|obs) is the posterior. Then it should be a function of likelihood times the prior, normalized by total p. 
+# In P(L1|correct) = P(L0) * (1 - P(S)) / [ P(L0) * (1 - P(S)) + (1 - P(L0)) * P(G) ] the denomintor is the total probability of the correct response. 
+# P(L0) is the prior
+# 1-P(S) - probability of answering correctly assuming they learned the skill. This is essentially the likelihood of correct response given the skill is learned.
+# (1 - P(L0)) * P(G)  - did't know but guessed correctly
+# P(L0) * (1 - P(S)) - knew before the question and didn't slip
+# the two terms in the denominator give the total probability. 
+
+# WHy is this the prior update - P(L2) = P(L1|obs1=1) + (1 - P(L1|obs1=0))P(T)?
