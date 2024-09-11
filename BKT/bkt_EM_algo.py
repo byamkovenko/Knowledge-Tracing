@@ -112,3 +112,15 @@ model.fit(data = df, skills = ".*plot.*") # using pyBKT - estimates are quite di
 # WHy is this the prior update - P(L2) = P(L1|obs1) + (1 - P(L1|obs1))P(T)?
 # Because there are two pathways to learning the skill - getting obs1 question correct (P(L1|obs1)) and learning the skill after getting the Q wrong (1-P(L1|obs)*P(T)
 # note the latter is weighted by the probability of transition. 
+
+# There are a lot of terms here but some of them mean the same:
+# P(S) is the same as P(obs=0|L)
+# 1-P(G) is the same P(obs=0|~L)
+# P(~L) is same as 1-P(L)
+
+# Broadly at each step the update is prior*likelihood/total_prob_of_response. If the response is correct, prior*(1-P(S))/total_prob_correct. 
+# If the response is incorrect, then it's prior*P(S)/total_prob_of_incorrect 
+# total_prob_of_correct - prior*1-P(S)+(1-prior)*P(G)
+# total_prob_of_incorrect - prior*P(S)+1-prior)*(1-P(G))
+# https://telearn.hal.science/hal-00197306/file/Reye04.pdf - belief networks, basiccally same thing
+# https://educationaldatamining.org/EDM2021/virtual/static/pdf/EDM21_paper_237.pdf BKT update 
