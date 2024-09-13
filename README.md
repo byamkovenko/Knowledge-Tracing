@@ -5,6 +5,6 @@ In developing the code for these models we relied on publicly available code in 
 However we made substantive updates to data processing (leveraging torch dataset/dataloader capabilities) as well as updates to the model code (eg. attention and padding masks in SAKT, added features). 
 We also added various metrics to the train and test loop, as well as the code for the callibration plot. 
 
-The results of the training of these models on Khan Academy data are posted on Khan Academy research blog and the detailed report can be found [here]([url](https://drive.google.com/file/d/1nMc1vgVLw7v2Gug-RL4Nse1yry53kYlX/view?usp=drive_link)). 
+The results of the training of these models on Khan Academy data are posted on Khan Academy research blog and the detailed report can be found  [here](https://drive.google.com/file/d/1nMc1vgVLw7v2Gug-RL4Nse1yry53kYlX/view?usp=drive_link)). 
 
 This work is made possible in part thanks to Schmidt Futures. 
