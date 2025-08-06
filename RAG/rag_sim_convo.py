@@ -16,6 +16,7 @@ import pandas as pd
 
 API_KEY="**************"
 API_BASE="******************"
+llm_model = model 
 
 print("creating emebbder", flush=True)
 embedder = OpenAIEmbeddings(
@@ -56,7 +57,7 @@ openai_client = openai.OpenAI(api_key=API_KEY, base_url=API_BASE)
 student_response_prompt = 'pretend you are student with poor understanding of math responding to the tutor\'s explanation. \
     The following is the message from a tutor for you to respond to. Ask for more help or to simplify explanation: ' 
 
-def tutor(initial_question, model="gpt-4-khan"):
+def tutor(initial_question, model=llm_model):
     counter = 0
     tutor_responses=[]
     student_questions =[initial_question]
@@ -89,7 +90,7 @@ def tutor(initial_question, model="gpt-4-khan"):
     return df
     
 
-def student(response, student_response_prompt,  model="gpt-4-khan", system=None):
+def student(response, student_response_prompt,  model=llm_model, system=None):
     responses=[]
     completion = openai_client.chat.completions.create(
         model=model,
